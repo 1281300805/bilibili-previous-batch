@@ -1,0 +1,107 @@
+.feed-roll-btn.bhr-controls-ready {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 8px !important;
+  height: auto !important;
+}
+
+#bhr-previous-batch {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 40px;
+  min-height: 78px;
+  padding: 8px 7px !important;
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #18191c;
+  background: #fff;
+  border: 1px solid #e3e5e7;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1.15;
+  transition:
+    color 0.18s ease,
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    opacity 0.18s ease;
+}
+
+#bhr-previous-batch:hover:not(:disabled) {
+  color: #00aeec;
+  border-color: #00aeec;
+  background: #f6fbff;
+}
+
+#bhr-previous-batch:focus-visible {
+  outline: 2px solid #00aeec;
+  outline-offset: 2px;
+}
+
+#bhr-previous-batch:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+#bhr-previous-batch .bhr-arrow {
+  font-size: 19px;
+  line-height: 1;
+}
+
+#bhr-previous-batch .bhr-label {
+  width: 1em;
+  word-break: break-all;
+}
+
+#bhr-previous-batch .bhr-history-count {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  box-sizing: border-box;
+  border-radius: 9px;
+  color: #fff;
+  background: #fb7299;
+  font-size: 11px;
+  line-height: 17px;
+  text-align: center;
+}
+
+.bhr-refresh-locked {
+  pointer-events: none !important;
+  opacity: 0.58 !important;
+}
+
+#bhr-archive-container {
+  animation: bhr-fade-in 0.16s ease-out;
+}
+
+@keyframes bhr-fade-in {
+  from {
+    opacity: 0.45;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  #bhr-previous-batch {
+    color: #e3e5e7;
+    background: #18191c;
+    border-color: #4c4d4f;
+  }
+
+  #bhr-previous-batch:hover:not(:disabled) {
+    color: #32b5e5;
+    border-color: #32b5e5;
+    background: #22252a;
+  }
+}

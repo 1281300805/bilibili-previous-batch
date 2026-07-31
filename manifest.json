@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "B站推荐上一批",
+  "version": "0.1.0",
+  "description": "为哔哩哔哩首页的“换一换”增加“上一批”，并防止快速连点。",
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.bilibili.com/",
+        "https://www.bilibili.com/index.html*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "css": [
+        "content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ]
+}
