@@ -17,11 +17,14 @@
   align-items: center;
   justify-content: center;
   gap: 3px;
-  color: #18191c;
-  background: #fff;
-  border: 1px solid #e3e5e7;
+  appearance: none;
+  color: var(--text1, #18191c);
+  background: var(--bg1, #fff);
+  border: 1px solid var(--line_regular, #e3e5e7);
   border-radius: 8px;
+  box-shadow: none;
   cursor: pointer;
+  font-family: inherit;
   font-size: 14px;
   line-height: 1.15;
   transition:
@@ -32,13 +35,13 @@
 }
 
 #bhr-previous-batch:hover:not(:disabled) {
-  color: #00aeec;
-  border-color: #00aeec;
-  background: #f6fbff;
+  color: var(--brand_blue, #00aeec);
+  border-color: var(--brand_blue, #00aeec);
+  background: var(--graph_bg_thin, #f6fbff);
 }
 
 #bhr-previous-batch:focus-visible {
-  outline: 2px solid #00aeec;
+  outline: 2px solid var(--brand_blue, #00aeec);
   outline-offset: 2px;
 }
 
@@ -67,7 +70,7 @@
   box-sizing: border-box;
   border-radius: 9px;
   color: #fff;
-  background: #fb7299;
+  background: var(--brand_pink, #fb7299);
   font-size: 11px;
   line-height: 17px;
   text-align: center;
@@ -89,19 +92,5 @@
 
   to {
     opacity: 1;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  #bhr-previous-batch {
-    color: #e3e5e7;
-    background: #18191c;
-    border-color: #4c4d4f;
-  }
-
-  #bhr-previous-batch:hover:not(:disabled) {
-    color: #32b5e5;
-    border-color: #32b5e5;
-    background: #22252a;
   }
 }
