@@ -85,6 +85,11 @@
   animation: bhr-fade-in 0.16s ease-out;
 }
 
+.recommended-container_floor-aside.bhr-archive-active
+  > .container:not(#bhr-archive-container) {
+  display: none !important;
+}
+
 @keyframes bhr-fade-in {
   from {
     opacity: 0.45;

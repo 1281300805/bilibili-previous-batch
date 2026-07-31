@@ -3,16 +3,25 @@
 
   const HISTORY_LIMIT = 10;
   const CLICK_COOLDOWN_MS = 650;
+  const ARCHIVE_REFRESH_SETTLE_MS = 120;
+  const ARCHIVE_REFRESH_TIMEOUT_MS = 5000;
   const PREVIOUS_BUTTON_ID = "bhr-previous-batch";
   const ARCHIVE_CONTAINER_ID = "bhr-archive-container";
+  const ARCHIVE_ACTIVE_CLASS = "bhr-archive-active";
   const READY_CLASS = "bhr-controls-ready";
 
   const history = [];
   let archiveContainer = null;
+  let archiveAside = null;
   let liveContainer = null;
   let liveContainerDisplay = "";
   let refreshLockedUntil = 0;
   let unlockTimer = 0;
+  let archiveRefreshPending = false;
+  let archiveRefreshKey = "";
+  let archiveRefreshPollTimer = 0;
+  let archiveRefreshRevealTimer = 0;
+  let archiveRefreshFallbackTimer = 0;
 
   function isRefreshButton(element) {
     const button = element?.closest?.("button");
@@ -97,7 +106,24 @@
     updatePreviousButton();
   }
 
+  function clearArchiveRefreshWait() {
+    archiveRefreshPending = false;
+    archiveRefreshKey = "";
+    clearInterval(archiveRefreshPollTimer);
+    clearTimeout(archiveRefreshRevealTimer);
+    clearTimeout(archiveRefreshFallbackTimer);
+    archiveRefreshPollTimer = 0;
+    archiveRefreshRevealTimer = 0;
+    archiveRefreshFallbackTimer = 0;
+  }
+
   function exitArchiveView() {
+    clearArchiveRefreshWait();
+
+    if (archiveAside?.isConnected) {
+      archiveAside.classList.remove(ARCHIVE_ACTIVE_CLASS);
+    }
+
     if (archiveContainer) {
       archiveContainer.remove();
       archiveContainer = null;
@@ -108,6 +134,80 @@
     }
     liveContainer = null;
     liveContainerDisplay = "";
+    archiveAside = null;
+  }
+
+  function adoptHiddenLiveContainer(container) {
+    if (!container || container === liveContainer) {
+      return;
+    }
+
+    liveContainer = container;
+    liveContainerDisplay = container.style.display;
+    container.style.display = "none";
+  }
+
+  function revealRefreshedLiveBatch() {
+    if (!archiveRefreshPending || !archiveContainer) {
+      return;
+    }
+
+    const currentLiveContainer = findLiveContainer();
+    if (!currentLiveContainer) {
+      return;
+    }
+
+    adoptHiddenLiveContainer(currentLiveContainer);
+    currentLiveContainer.style.display = "none";
+
+    const currentKey = snapshotKey(currentLiveContainer);
+    if (!currentKey || currentKey === archiveRefreshKey) {
+      return;
+    }
+
+    if (archiveRefreshRevealTimer) {
+      return;
+    }
+
+    archiveRefreshRevealTimer = window.setTimeout(() => {
+      archiveRefreshRevealTimer = 0;
+      const settledLiveContainer = findLiveContainer();
+      const settledKey = settledLiveContainer
+        ? snapshotKey(settledLiveContainer)
+        : "";
+
+      if (
+        archiveRefreshPending &&
+        settledLiveContainer &&
+        settledKey &&
+        settledKey !== archiveRefreshKey
+      ) {
+        adoptHiddenLiveContainer(settledLiveContainer);
+        exitArchiveView();
+      }
+    }, ARCHIVE_REFRESH_SETTLE_MS);
+  }
+
+  function waitForRefreshedLiveBatch() {
+    const currentLiveContainer = findLiveContainer();
+    if (!archiveContainer || !currentLiveContainer) {
+      exitArchiveView();
+      return;
+    }
+
+    clearArchiveRefreshWait();
+    adoptHiddenLiveContainer(currentLiveContainer);
+    currentLiveContainer.style.display = "none";
+    archiveRefreshPending = true;
+    archiveRefreshKey = snapshotKey(currentLiveContainer);
+    archiveRefreshPollTimer = window.setInterval(
+      revealRefreshedLiveBatch,
+      50
+    );
+    archiveRefreshFallbackTimer = window.setTimeout(
+      exitArchiveView,
+      ARCHIVE_REFRESH_TIMEOUT_MS
+    );
   }
 
   function restorePreviousBatch() {
@@ -134,6 +234,8 @@
     liveContainerDisplay = liveContainer.style.display;
     liveContainer.style.display = "none";
 
+    archiveAside = aside;
+    archiveAside.classList.add(ARCHIVE_ACTIVE_CLASS);
     archiveContainer = entry.node.cloneNode(true);
     archiveContainer.id = ARCHIVE_CONTAINER_ID;
     archiveContainer.classList.add("bhr-archive-view");
@@ -171,7 +273,7 @@
     }, CLICK_COOLDOWN_MS);
 
     if (archiveContainer) {
-      exitArchiveView();
+      waitForRefreshedLiveBatch();
     } else {
       pushCurrentBatch();
     }
@@ -235,6 +337,7 @@
 
   const observer = new MutationObserver(() => {
     ensurePreviousButton();
+    revealRefreshedLiveBatch();
   });
 
   observer.observe(document.documentElement, {

@@ -17,7 +17,7 @@
 
 ### Chrome 安装
 
-1. 下载 [Chrome v0.1.1 安装包](https://github.com/1281300805/bilibili-previous-batch/releases/latest/download/bilibili-previous-batch-v0.1.1.zip)；
+1. 下载 [Chrome v0.1.2 安装包](https://github.com/1281300805/bilibili-previous-batch/releases/latest/download/bilibili-previous-batch-v0.1.2.zip)；
 2. 将 ZIP 解压到一个固定文件夹；
 3. 在 Chrome 地址栏打开 `chrome://extensions/`；
 4. 开启右上角“开发者模式”；
@@ -31,7 +31,7 @@ Edge 和 Chrome 都基于 Chromium，本项目使用同一套扩展代码：
 
 > 注意：部分新版 Edge 稳定版可能不显示“开发人员模式”和“加载解压缩的扩展”。遇到这种情况并不是压缩包有问题。开发测试可改用 Microsoft Edge Dev/Canary；面向普通用户分发时，应发布到 Microsoft Edge 加载项商店。
 
-1. 下载 [Edge v0.1.1 安装包](https://github.com/1281300805/bilibili-previous-batch/releases/latest/download/bilibili-previous-batch-edge-v0.1.1.zip)，并解压到一个固定文件夹；
+1. 下载 [Edge v0.1.2 安装包](https://github.com/1281300805/bilibili-previous-batch/releases/latest/download/bilibili-previous-batch-edge-v0.1.2.zip)，并解压到一个固定文件夹；
 2. 在 Edge 地址栏打开 `edge://extensions/`；
 3. 开启左侧的“开发人员模式”；
 4. 点击“加载解压缩的扩展”；
